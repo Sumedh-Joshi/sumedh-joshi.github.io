@@ -1,39 +1,51 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    background-color: #f5f5f5;
+    color: #333;
+    scroll-behavior: smooth; /* Smooth scrolling */
 }
 
+/* Header Styles */
 header {
+    background-color: #333;
+    color: #fff;
+    padding: 2rem 0;
     text-align: center;
-    background: #333;
-    color: white;
-    padding: 1rem 0;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-header a {
-    color: #ffcc00;
-    text-decoration: none;
-}
-
-header a:hover {
-    text-decoration: underline;
-}
-
+/* Fix for Sticky Header Overlap */
 section {
+    padding: 80px 2rem 2rem 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    max-width: 900px;
     margin: 2rem auto;
-    padding: 1rem;
-    max-width: 800px;
-    text-align: center;
 }
 
-#photo img {
+/* About Image */
+#info img {
     max-width: 200px;
     border-radius: 50%;
     margin-top: 1rem;
+    border: 5px solid #333;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
 }
 
+#info img:hover {
+    transform: scale(1.05);
+}
+
+/* List Styles */
 ul {
     list-style-type: none;
     padding: 0;
@@ -41,11 +53,36 @@ ul {
 
 ul li {
     margin: 0.5rem 0;
+    font-size: 1.1rem;
 }
 
+/* Footer Styles */
 footer {
     text-align: center;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     background: #333;
     color: white;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    header nav a {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    #info img {
+        max-width: 150px;
+    }
+
+    section {
+        padding: 100px 1rem 2rem 1rem;
+        margin: 2rem 1rem;
+    }
 }
