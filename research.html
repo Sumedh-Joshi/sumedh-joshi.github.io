@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research - Sumedh Joshi</title>
+<meta name="description" content="Undergraduate research on Byzantine fault-tolerant broadcast and self-stabilizing overlays at Kent State University.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-name" href="index.html">Sumedh Joshi</a>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="projects.html">projects</a>
+      <a href="research.html" class="active">research</a>
+      <a href="about.html">about</a>
+      <a href="contact.html">contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="page-head">
+    <h1>Research</h1>
+    <p class="lede">Distributed systems - how a network of machines agrees on something when some of those machines are actively lying.</p>
+  </header>
+
+  <section>
+    <p class="eyebrow">SURE Program</p>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Byzantine Reliable Broadcast in QUANTAS</h3>
+        <span class="dates">summer 2026 -</span>
+      </div>
+      <p class="org">Advised by Prof. Mikhail Nesterenko · Kent State University</p>
+      <ul>
+        <li>Implemented Bracha's Byzantine fault-tolerant reliable broadcast protocol in C++ on the QUANTAS discrete-event simulator, building the SEND/ECHO/READY quorum logic to tolerate up to ⅓ Byzantine nodes across networks of 10–100 peers under asynchronous conditions.</li>
+        <li>Designed and ran four controlled experiment sweeps varying network delay (1–10 rounds), peer count (25–100), and Byzantine fault percentage (0–30%), with 30 randomized seeds per configuration.</li>
+        <li>Showed that latency scales linearly with network delay (~2 rounds per delay unit) and message complexity grows as O(n²), confirming Bracha's theoretical properties empirically.</li>
+      </ul>
+      <p class="tools">c++ · quantas · python · matplotlib</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Seminar reading &amp; presentations</h3>
+        <span class="dates">2026</span>
+      </div>
+      <p>Alongside the implementation work, I read and presented papers on Byzantine broadcast in partially connected networks, reliable communication in dynamic (time-varying) networks, and self-stabilizing overlay networks - including Tiara, a deterministic skip list. The work here is translating formal solvability conditions, connectivity bounds, and correctness proofs into something a room can follow.</p>
+    </div>
+  </section>
+
+  <!-- <section>
+    <p class="eyebrow">Background reading</p>
+    <div class="entry">
+      <p>Foundational material I've worked through along the way:</p>
+    </div>
+  </section> -->
+
+  <footer>
+    <span>Sumedh Joshi</span>
+    <span><a href="contact.html">get in touch →</a></span>
+  </footer>
+
+</main>
+
+</body>
+</html>
