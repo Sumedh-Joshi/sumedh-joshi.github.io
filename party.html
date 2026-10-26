@@ -8,6 +8,8 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="Birthday party invitation.">
     <meta name="theme-color" content="#131113">
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%89%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -40,6 +42,12 @@
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::selection {
+            background: rgba(226, 178, 92, .35);
+            color: var(--ink);
         }
 
         .wrap {
@@ -69,11 +77,18 @@
         .invite h1 {
             margin: 0;
             font-family: 'Space Grotesk', system-ui, sans-serif;
-            font-size: clamp(40px, 8vw, 64px);
+            font-size: clamp(32px, 8.6vw, 60px);
             font-weight: 600;
             line-height: 1.04;
             letter-spacing: -.025em;
             text-wrap: balance;
+        }
+
+        /* Keep the name on one line where the column is wide enough to hold it. */
+        @media (min-width: 360px) {
+            .invite h1 .name {
+                white-space: nowrap;
+            }
         }
 
         .rule {
@@ -174,10 +189,38 @@
             z-index: 10;
         }
 
+        .detail dt {
+            transition: color .2s ease;
+        }
+
+        .detail:hover dt {
+            color: var(--gold);
+        }
+
+        /* Headline letters are split into .word/.char spans by the script below. */
+        .invite h1 .word {
+            white-space: nowrap;
+        }
+
+        .invite h1 .char {
+            display: inline-block;
+        }
+
+        .party-footer {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .spraying,
+        .spraying * {
+            user-select: none;
+            cursor: crosshair;
+        }
+
         /* Staggered reveal on load. */
         @media (prefers-reduced-motion: no-preference) {
 
-            .invite,
+            .kicker,
             .rule,
             .detail,
             .party-footer {
@@ -190,6 +233,27 @@
             .detail:nth-child(3) { animation-delay: .26s; }
             .detail:nth-child(4) { animation-delay: .32s; }
             .party-footer { animation-delay: .40s; }
+
+            .invite h1 .char {
+                animation: drop .8s cubic-bezier(.2, 1.5, .4, 1) both;
+                animation-delay: calc(.12s + var(--i) * 30ms);
+            }
+
+            @keyframes drop {
+                from {
+                    opacity: 0;
+                    transform: translateY(-.5em) rotate(-10deg);
+                }
+
+                60% {
+                    opacity: 1;
+                }
+
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
 
             @keyframes rise {
                 from {
@@ -226,7 +290,7 @@
     <main class="wrap">
         <section class="invite">
             <p class="kicker">You're invited</p>
-            <h1>It's Sugar Pom Pom's birthday!!!</h1>
+            <h1>It's <span class="name">Sugar Pom Pom's</span> birthday!!!</h1>
         </section>
         <hr class="rule">
         <section>
@@ -235,7 +299,7 @@
                     <dt>When</dt>
                     <dd>
                         Saturday, November 7
-                        <span class="sub">2026 - 7 pm</span>
+                        <span class="sub">7 pm</span>
                         <span class="sub">Fireball will be present :D</span>
 
                     </dd>
@@ -271,14 +335,19 @@
         </section>
         <hr class="rule">
         <div class="party-footer">
-            See you there
+            See you there 
         </div>
     </main>
 
     <script>
-        // Confetti: one burst on load, a small pop wherever the page is clicked/tapped.
+        // Party effects. All motion is skipped when the visitor prefers reduced motion.
+        //  - confetti cannons on load, a pop on click/tap, rain when the footer is clicked
+        //  - press and hold (mouse) to spray confetti from the cursor
+        //  - headline letters drop in, hop on hover, and wave when clicked
         (() => {
             if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            /* ---------- Confetti ---------- */
 
             const canvas = document.createElement('canvas');
             canvas.className = 'confetti';
@@ -288,7 +357,9 @@
 
             const COLORS = ['#e2b25c', '#f2ede6', '#d9776b', '#7fb7aa', '#b99ad8'];
             const GRAVITY = 0.22;
-            const DRAG = 0.985;
+            const RISE_DRAG = 0.985; // light drag going up so cannons carry
+            const FALL_DRAG = 0.955; // heavy drag coming down so paper flutters (terminal ??? 4.7px/frame)
+            const MAX_PARTS = 1500;
             const parts = [];
             let width = 0, height = 0, last = 0, running = false;
 
@@ -301,26 +372,24 @@
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
 
-            function burst(x, y, angle, spread, count, speed) {
-                for (let i = 0; i < count; i++) {
-                    const a = angle + (Math.random() - 0.5) * spread;
-                    const v = speed * (0.55 + Math.random() * 0.6);
-                    parts.push({
-                        x, y,
-                        vx: Math.cos(a) * v,
-                        vy: Math.sin(a) * v,
-                        w: 6 + Math.random() * 6,
-                        h: 3 + Math.random() * 4,
-                        rot: Math.random() * Math.PI * 2,
-                        vr: (Math.random() - 0.5) * 0.3,
-                        tilt: Math.random() * Math.PI * 2,
-                        vt: 0.08 + Math.random() * 0.12,
-                        color: COLORS[(Math.random() * COLORS.length) | 0],
-                        round: Math.random() < 0.25,
-                        life: 0,
-                        ttl: 200 + Math.random() * 120,
-                    });
-                }
+            function spawn(x, y, vx, vy, ttl) {
+                if (parts.length >= MAX_PARTS) return;
+                parts.push({
+                    x, y, vx, vy,
+                    w: 6 + Math.random() * 6,
+                    h: 3 + Math.random() * 4,
+                    rot: Math.random() * Math.PI * 2,
+                    vr: (Math.random() - 0.5) * 0.3,
+                    tilt: Math.random() * Math.PI * 2,
+                    vt: 0.08 + Math.random() * 0.12,
+                    wob: Math.random() * Math.PI * 2,
+                    vwob: 0.03 + Math.random() * 0.05,
+                    wobAmp: 0.4 + Math.random() * 0.9,
+                    color: COLORS[(Math.random() * COLORS.length) | 0],
+                    round: Math.random() < 0.25,
+                    life: 0,
+                    ttl,
+                });
                 if (!running) {
                     running = true;
                     last = performance.now();
@@ -328,18 +397,43 @@
                 }
             }
 
+            function burst(x, y, angle, spread, count, speed, ttl) {
+                for (let i = 0; i < count; i++) {
+                    const a = angle + (Math.random() - 0.5) * spread;
+                    const v = speed * (0.55 + Math.random() * 0.6);
+                    spawn(x, y, Math.cos(a) * v, Math.sin(a) * v, ttl * (0.8 + Math.random() * 0.5));
+                }
+            }
+
+            function rain() {
+                const count = width < 520 ? 100 : 200;
+                for (let i = 0; i < count; i++) {
+                    spawn(
+                        Math.random() * width,
+                        -20 - Math.random() * height * 0.6,
+                        (Math.random() - 0.5) * 2,
+                        2 + Math.random() * 2,
+                        600,
+                    );
+                }
+            }
+
             function tick(now) {
                 // Frame-rate independent: dt is in 60fps frames, clamped after tab switches.
                 const dt = Math.min((now - last) / 16.667, 3);
                 last = now;
-                const drag = Math.pow(DRAG, dt);
+                const riseDrag = Math.pow(RISE_DRAG, dt);
+                const fallDrag = Math.pow(FALL_DRAG, dt);
                 ctx.clearRect(0, 0, width, height);
 
                 for (let i = parts.length - 1; i >= 0; i--) {
                     const p = parts[i];
+                    const falling = p.vy > 0;
+                    const drag = falling ? fallDrag : riseDrag;
                     p.vx *= drag;
                     p.vy = p.vy * drag + GRAVITY * dt;
-                    p.x += p.vx * dt;
+                    p.wob += p.vwob * dt;
+                    p.x += (p.vx + (falling ? Math.sin(p.wob) * p.wobAmp : 0)) * dt;
                     p.y += p.vy * dt;
                     p.rot += p.vr * dt;
                     p.tilt += p.vt * dt;
@@ -349,6 +443,7 @@
                         parts.splice(i, 1);
                         continue;
                     }
+                    if (p.y < -20) continue; // queued rain above the viewport
 
                     ctx.save();
                     ctx.globalAlpha = Math.min(1, (p.ttl - p.life) / 40);
@@ -377,19 +472,130 @@
             resize();
             window.addEventListener('resize', resize);
 
-            // Opening burst: two cannons from the bottom corners, aimed up and inward.
+            // Opening burst: two cannons from the bottom corners, timed to the headline landing.
             window.addEventListener('load', () => {
                 setTimeout(() => {
                     const speed = Math.max(14, Math.sqrt(height) * 0.68);
                     const count = width < 520 ? 60 : 110;
-                    burst(0, height, -Math.PI / 3, 0.7, count, speed);
-                    burst(width, height, -Math.PI * 2 / 3, 0.7, count, speed);
-                }, 350);
+                    burst(0, height, -Math.PI / 3, 0.7, count, speed, 360);
+                    burst(width, height, -Math.PI * 2 / 3, 0.7, count, speed, 360);
+                }, 700);
             });
 
+            // Press and hold still (mouse only; on touch a hold means scroll or text selection).
+            // Moving before the hold registers is treated as a text selection and cancels the spray.
+            let spray = null;
+            let suppressClick = false;
+
+            function sprayLoop(s) {
+                if (spray !== s) return;
+                burst(s.x, s.y, -Math.PI / 2, 1.1, 3, 11, 220);
+                requestAnimationFrame(() => sprayLoop(s));
+            }
+
+            function endSpray() {
+                if (!spray) return;
+                clearTimeout(spray.timer);
+                suppressClick = spray.on;
+                spray = null;
+                document.documentElement.classList.remove('spraying');
+            }
+
             document.addEventListener('pointerdown', (e) => {
+                suppressClick = false;
+                if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a')) return;
+                const s = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false };
+                s.timer = setTimeout(() => {
+                    s.on = true;
+                    window.getSelection().removeAllRanges();
+                    document.documentElement.classList.add('spraying');
+                    sprayLoop(s);
+                }, 220);
+                spray = s;
+            });
+            window.addEventListener('pointermove', (e) => {
+                if (!spray) return;
+                if (!spray.on && Math.hypot(e.clientX - spray.x0, e.clientY - spray.y0) > 6) {
+                    endSpray();
+                    return;
+                }
+                spray.x = e.clientX;
+                spray.y = e.clientY;
+            });
+            window.addEventListener('pointerup', endSpray);
+            window.addEventListener('pointercancel', endSpray);
+            window.addEventListener('blur', endSpray);
+
+            // `click` rather than `pointerdown`: a touch that starts a scroll shouldn't fire confetti.
+            document.addEventListener('click', (e) => {
+                if (suppressClick) {
+                    suppressClick = false;
+                    return;
+                }
                 if (e.target.closest('a')) return;
-                burst(e.clientX, e.clientY, -Math.PI / 2, Math.PI * 2, 36, 9);
+                if (e.target.closest('.party-footer')) {
+                    rain();
+                    return;
+                }
+                burst(e.clientX, e.clientY, -Math.PI / 2, Math.PI * 2, 36, 9, 170);
+            });
+
+            /* ---------- Headline ---------- */
+
+            const h1 = document.querySelector('.invite h1');
+            h1.setAttribute('aria-label', h1.textContent.trim());
+            const chars = [];
+
+            // Each word becomes a no-wrap span of per-letter spans; spaces stay as text so lines still break between words.
+            function splitText(node) {
+                const frag = document.createDocumentFragment();
+                for (const part of node.textContent.split(/(\s+)/)) {
+                    if (!part) continue;
+                    if (/^\s+$/.test(part)) {
+                        frag.append(' ');
+                        continue;
+                    }
+                    const word = document.createElement('span');
+                    word.className = 'word';
+                    word.setAttribute('aria-hidden', 'true');
+                    for (const ch of part) {
+                        const c = document.createElement('span');
+                        c.className = 'char';
+                        c.textContent = ch;
+                        c.style.setProperty('--i', chars.length);
+                        word.append(c);
+                        chars.push(c);
+                    }
+                    frag.append(word);
+                }
+                node.replaceWith(frag);
+            }
+
+            (function walk(el) {
+                for (const n of [...el.childNodes]) {
+                    if (n.nodeType === Node.TEXT_NODE) splitText(n);
+                    else walk(n);
+                }
+            })(h1);
+
+            function hop(c) {
+                if (c.hopping) return;
+                c.hopping = c.animate([
+                    { transform: 'none' },
+                    { transform: 'translateY(-.22em) rotate(-6deg)', offset: 0.35 },
+                    { transform: 'none' },
+                ], { duration: 520, easing: 'cubic-bezier(.3, .7, .3, 1)' });
+                c.hopping.onfinish = () => { c.hopping = null; };
+            }
+
+            for (const c of chars) {
+                c.addEventListener('pointerenter', (e) => {
+                    if (e.pointerType === 'mouse') hop(c);
+                });
+            }
+
+            h1.addEventListener('click', () => {
+                chars.forEach((c, k) => setTimeout(() => hop(c), k * 25));
             });
         })();
     </script>
