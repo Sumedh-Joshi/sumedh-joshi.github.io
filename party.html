@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're invited — Sumedh's Birthday</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Birthday party invitation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Party page only — a little warmer than the rest of the site. */
+        .invite {
+            text-align: center;
+            padding: 72px 0 8px;
+        }
+
+        .kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 22px;
+        }
+
+        .invite h1 {
+            font-size: clamp(36px, 8vw, 58px);
+            line-height: 1.05;
+            margin-bottom: 18px;
+        }
+
+        .invite .lede {
+            margin: 0 auto;
+        }
+
+        .rule {
+            width: 48px;
+            height: 2px;
+            background: var(--gold);
+            margin: 36px auto;
+            border: none;
+        }
+
+        .details {
+            display: grid;
+            gap: 28px;
+            text-align: center;
+            padding: 8px 0 12px;
+        }
+
+        .detail dt {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .detail dd {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .detail dd .sub {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 44ch;
+            margin: 0 auto;
+        }
+
+        .map-link {
+            display: inline-block;
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .party-footer {
+            margin-top: 48px;
+            padding: 28px 0 72px;
+            border-top: 1px solid var(--line);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="invite" style="border-top: none;">
+            <p class="kicker">You're invited</p>
+            <h1>It's Sugar Pom Pom's birthday</h1>
+        </section>
+        <hr class="rule">
+        <section style="border-top: none; padding-top: 0;">
+            <dl class="details">
+                <div class="detail">
+                    <dt>When</dt>
+                    <dd>
+                        Saturday, November 7
+                        <span class="sub">2026 · 7 pm</span>
+                    </dd>
+                </div>
+
+                <div class="detail">
+                    <dt>Where</dt>
+                    <dd>
+                        1839 Ashton Lane, Apt 172
+                        <span class="sub">Kent, Ohio</span>
+                        <a class="map-link" href="https://maps.google.com/?q=1839+Ashton+Lane+Apt+172+Kent+OH">open in
+                            maps ↗</a>
+                    </dd>
+                </div>
+
+                <div class="detail">
+                    <dt>Parking</dt>
+                    <dd>
+                        Park here
+                        <span class="sub">Follow the link for the exact lot (towing goes on 24/7).</span>
+                        <a class="map-link" href="PASTE_PARKING_LINK_HERE">parking directions ↗</a>
+                    </dd>
+                </div>
+
+                <div class="detail">
+                    <dt>RSVP</dt>
+                    <dd>
+                        Not needed
+                    </dd>
+                </div>
+            </dl>
+        </section>
+        <hr class="rule">
+        <div class="party-footer">
+            See you there 🎉
+        </div>
+    </main>
+
+</body>
+
+</html>
